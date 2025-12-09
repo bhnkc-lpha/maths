@@ -283,7 +283,7 @@ const AngleQuiz = () => {
     });
 
     setInput('');
-    const newMsg = '請輸入紅色弧線標示的角名稱 (請記住，頂點必須置中)';
+    const newMsg = '請輸入紅色弧線標示的角名稱';
       
     setFeedback({ type: 'neutral', msg: newMsg });
     setIsAnswered(false);
