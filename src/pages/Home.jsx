@@ -7,7 +7,7 @@ const Home = () => {
     {
       id: 'angle-quiz',
       title: '角的標記',
-      description: '學習如何正確標記和命名角度，包含單角、多邊形角和複雜結構角',
+      description: '學習如何正確標記和命名角度 (使用三個英文字母)',
       icon: Calculator,
       color: 'bg-blue-500',
       hoverColor: 'hover:bg-blue-600',
@@ -46,7 +46,7 @@ const Home = () => {
             歡迎來到數學自習天地 🎓
           </h2>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            透過互動式學習工具，讓數學變得更有趣！選擇下方的應用程式開始你的學習之旅。
+            透過互動式學習工具，讓你以輕鬆的遊戲方式去鞏固知識，溫習測考！選擇下方的應用程式開始你的學習之旅。
           </p>
         </div>
 
