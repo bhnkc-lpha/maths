@@ -401,9 +401,9 @@ const CircleTheorems = () => {
                   </defs>
 
                   <circle cx={center.x} cy={center.y} r={radius} className="fill-white stroke-slate-300 stroke-2" />
-                  <circle cx={center.x} cy={center.y} r={3} className="fill-slate-400" />
-                  <text x={center.x + 8} y={center.y + 15} className="text-xs fill-slate-400">O</text>
-
+                  <circle cx={center.x} cy={center.y} r={4} className="fill-slate-600" />
+                  <text x={center.x + 10} y={center.y + 5} className="text-sm font-bold fill-slate-700">O</text>
+                
                   {/* MODE 1, 2, 3 */}
                   {['center', 'segment', 'semicircle'].includes(mode) && (
                       <>
@@ -542,21 +542,21 @@ const CircleTheorems = () => {
                           <EqualLengthMark p1={coordsTExt} p2={coordsTanB} count={2} />
                           
                           <g>
-                              <path d={getAngleArcPath(coordsTExt.x, coordsTExt.y, 60, getAngle(coordsTanA.x, coordsTanA.y, coordsTExt), angles.T)} className="fill-blue-100 stroke-blue-500" />
-                               <text x={getTextPos(coordsTExt.x, coordsTExt.y, 75, getAngle(coordsTanA.x, coordsTanA.y, coordsTExt), angles.T).x} y={getTextPos(coordsTExt.x, coordsTExt.y, 75, getAngle(coordsTanA.x, coordsTanA.y, coordsTExt), angles.T).y} className="text-xs font-bold fill-blue-600" textAnchor="middle" dominantBaseline="middle">{angleATO}°</text>
+                              <path d={getAngleArcPath(coordsTExt.x, coordsTExt.y, 60, angles.T, getAngle(coordsTanA.x, coordsTanA.y, coordsTExt))} className="fill-blue-100 stroke-blue-500" />
+                               <text x={getTextPos(coordsTExt.x, coordsTExt.y, 75, angles.T, getAngle(coordsTanA.x, coordsTanA.y, coordsTExt)).x} y={getTextPos(coordsTExt.x, coordsTExt.y, 75, angles.T, getAngle(coordsTanA.x, coordsTanA.y, coordsTExt)).y} className="text-xs font-bold fill-blue-600" textAnchor="middle" dominantBaseline="middle">{angleATO}°</text>
                           </g>
                            <g>
-                              <path d={getAngleArcPath(coordsTExt.x, coordsTExt.y, 60, getAngle(coordsTanB.x, coordsTanB.y, coordsTExt), angles.T)} className="fill-blue-100 stroke-blue-500" />
-                               <text x={getTextPos(coordsTExt.x, coordsTExt.y, 75, getAngle(coordsTanB.x, coordsTanB.y, coordsTExt), angles.T).x} y={getTextPos(coordsTExt.x, coordsTExt.y, 75, getAngle(coordsTanB.x, coordsTanB.y, coordsTExt), angles.T).y} className="text-xs font-bold fill-blue-600" textAnchor="middle" dominantBaseline="middle">{angleBTO}°</text>
+                              <path d={getAngleArcPath(coordsTExt.x, coordsTExt.y, 60, angles.T, getAngle(coordsTanB.x, coordsTanB.y, coordsTExt))} className="fill-blue-100 stroke-blue-500" />
+                               <text x={getTextPos(coordsTExt.x, coordsTExt.y, 75, angles.T, getAngle(coordsTanB.x, coordsTanB.y, coordsTExt)).x} y={getTextPos(coordsTExt.x, coordsTExt.y, 75, angles.T, getAngle(coordsTanB.x, coordsTanB.y, coordsTExt)).y} className="text-xs font-bold fill-blue-600" textAnchor="middle" dominantBaseline="middle">{angleBTO}°</text>
                           </g>
                           
-                           <g>
-                              <path d={getAngleArcPath(center.x, center.y, 30, getAngle(coordsTanA.x, coordsTanA.y, center), angles.T)} className="fill-green-100 stroke-green-500" />
-                               <text x={getTextPos(center.x, center.y, 45, getAngle(coordsTanA.x, coordsTanA.y, center), angles.T).x} y={getTextPos(center.x, center.y, 45, getAngle(coordsTanA.x, coordsTanA.y, center), angles.T).y} className="text-xs font-bold fill-green-600" textAnchor="middle" dominantBaseline="middle">{angleAOT}°</text>
+                          <g>
+                              <path d={getAngleArcPath(center.x, center.y, 30, angles.T, getAngle(coordsTanA.x, coordsTanA.y, center))} className="fill-green-100 stroke-green-500" />
+                               <text x={getTextPos(center.x, center.y, 45, angles.T, getAngle(coordsTanA.x, coordsTanA.y, center)).x} y={getTextPos(center.x, center.y, 45, angles.T, getAngle(coordsTanA.x, coordsTanA.y, center)).y} className="text-xs font-bold fill-green-600" textAnchor="middle" dominantBaseline="middle">{angleAOT}°</text>
                           </g>
                            <g>
-                              <path d={getAngleArcPath(center.x, center.y, 30, getAngle(coordsTanB.x, coordsTanB.y, center), angles.T)} className="fill-green-100 stroke-green-500" />
-                               <text x={getTextPos(center.x, center.y, 45, getAngle(coordsTanB.x, coordsTanB.y, center), angles.T).x} y={getTextPos(center.x, center.y, 45, getAngle(coordsTanB.x, coordsTanB.y, center), angles.T).y} className="text-xs font-bold fill-green-600" textAnchor="middle" dominantBaseline="middle">{angleBOT}°</text>
+                              <path d={getAngleArcPath(center.x, center.y, 30, angles.T, getAngle(coordsTanB.x, coordsTanB.y, center))} className="fill-green-100 stroke-green-500" />
+                               <text x={getTextPos(center.x, center.y, 45, angles.T, getAngle(coordsTanB.x, coordsTanB.y, center)).x} y={getTextPos(center.x, center.y, 45, angles.T, getAngle(coordsTanB.x, coordsTanB.y, center)).y} className="text-xs font-bold fill-green-600" textAnchor="middle" dominantBaseline="middle">{angleBOT}°</text>
                           </g>
                           
                            <text x={coordsTanA.x} y={coordsTanA.y - 10} className="text-sm font-bold fill-slate-700">A</text>
