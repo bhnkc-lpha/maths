@@ -25,7 +25,18 @@ const Home = () => {
       path: '/circle-theorems',
       difficulty: '中級 - 高級',
       topics: ['圓形性質', '切線', '圓內接四邊形']
-    }
+    },
+    {  
+      id: 'algebra',  
+      title: '恆等式展開/因式分解',  
+      description: '恆等式展開與因式分解練習',  
+      icon: Calculator,  
+      color: 'bg-indigo-500',
+      hovercolor: 'hover:bg-indigo-500',  
+      path: '/algebra'  
+      difficulty: '初級 - 高級',
+      topics: ['圓形性質', '切線', '圓內接四邊形']
+    }  
     // 未來可以在這裡加入更多 apps
   ];
 
