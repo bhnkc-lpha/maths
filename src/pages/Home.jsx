@@ -27,13 +27,13 @@ const Home = () => {
       topics: ['圓形性質', '切線', '圓內接四邊形']
     },
     {  
-      id: 'algebra',  
+      id: 'identity',  
       title: '恆等式展開/因式分解',  
       description: '恆等式展開與因式分解練習',  
       icon: Calculator,  
       color: 'bg-indigo-500',
       hovercolor: 'hover:bg-indigo-500',  
-      path: '/algebra',  
+      path: '/identity',  
       chapter: ['F2CH3', 'F2CH4'],
       topics: ['完全平方', '展開', '因式分解']
     }  
