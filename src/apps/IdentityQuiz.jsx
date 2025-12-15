@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Lightbulb, Check, X, Trophy, GraduationCap, ArrowRight, Delete, Home as HomeIcon } from 'lucide-react';
 
@@ -77,6 +77,20 @@ const IdentityQuiz = () => {
   
   const inputRef = useRef(null);
 
+  // ✅ 提取題目中的變數
+  const extractVariables = (questionText) => {
+    if (!questionText) return ['x', 'y'];
+    const matches = questionText.match(/[a-z]/g);
+    if (!matches || matches.length === 0) return ['x', 'y'];
+    const unique = [...new Set(matches)].sort();
+    return unique.length >= 2 ? unique.slice(0, 2) : [unique[0], 'y'];
+  };
+
+  // ✅ 用 useMemo 緩存變數
+  const currentVariables = useMemo(() => {
+    return currentQuestion ? extractVariables(currentQuestion.text) : ['x', 'y'];
+  }, [currentQuestion]);
+
   // 生成隨機項
   const generateTerm = (allowVariable = true) => {
     const vars = ['x', 'y', 'a', 'b', 'n', 'm'];
@@ -152,7 +166,8 @@ const IdentityQuiz = () => {
       hintText = `(a + b)^2 = a^2 + 2ab + b^2`;
       if (mode === 'expand') {
         questionText = `(${A}+${B})^2`;
-        validAnswers = [`${A2}+${_2AB}+${B2}`];
+        const baseAnswer = `${A2}+${_2AB}+${B2}`;
+        validAnswers = [baseAnswer, `(${baseAnswer})`];
       } else {
         questionText = `${A2}+${_2AB}+${B2}`;
         validAnswers = [`(${A}+${B})^2`, `(${B}+${A})^2`, `(${A}+${B})(${A}+${B})`, `(${B}+${A})(${B}+${A})`];
@@ -161,7 +176,8 @@ const IdentityQuiz = () => {
       hintText = `(a - b)^2 = a^2 - 2ab + b^2`;
       if (mode === 'expand') {
         questionText = `(${A}-${B})^2`;
-        validAnswers = [`${A2}-${_2AB}+${B2}`];
+        const baseAnswer = `${A2}-${_2AB}+${B2}`;
+        validAnswers = [baseAnswer, `(${baseAnswer})`];
       } else {
         questionText = `${A2}-${_2AB}+${B2}`;
         validAnswers = [`(${A}-${B})^2`, `(${A}-${B})(${A}-${B})`];
@@ -170,7 +186,8 @@ const IdentityQuiz = () => {
       hintText = `(a + b)(a - b) = a^2 - b^2`;
       if (mode === 'expand') {
         questionText = Math.random() > 0.5 ? `(${A}+${B})(${A}-${B})` : `(${A}-${B})(${A}+${B})`;
-        validAnswers = [`${A2}-${B2}`];
+        const baseAnswer = `${A2}-${B2}`;
+        validAnswers = [baseAnswer, `(${baseAnswer})`];
       } else {
         questionText = `${A2}-${B2}`;
         validAnswers = [`(${A}+${B})(${A}-${B})`, `(${A}-${B})(${A}+${B})`, `(${B}+${A})(${A}-${B})`, `(${A}-${B})(${B}+${A})`];
@@ -259,11 +276,33 @@ const IdentityQuiz = () => {
     }, 50);
   };
 
+  // ✅ 改進的 normalize 函數 - 移除外層括號
   const normalize = (str) => {
-    return str
+    let cleaned = str
       .replace(/\s+/g, '') 
       .replace(/\^/g, '^') 
       .toLowerCase();
+    
+    // 移除外層不必要的括號
+    while (cleaned.startsWith('(') && cleaned.endsWith(')')) {
+      let depth = 0;
+      let isComplete = true;
+      for (let i = 0; i < cleaned.length - 1; i++) {
+        if (cleaned[i] === '(') depth++;
+        if (cleaned[i] === ')') depth--;
+        if (depth === 0) {
+          isComplete = false;
+          break;
+        }
+      }
+      if (isComplete) {
+        cleaned = cleaned.slice(1, -1);
+      } else {
+        break;
+      }
+    }
+    
+    return cleaned;
   };
 
   const getTerms = (polynomial) => {
@@ -464,6 +503,7 @@ const IdentityQuiz = () => {
               </div>
             </form>
 
+            {/* 第1行：括號、平方 */}
             <div className="w-full grid grid-cols-4 gap-2 mt-3"> 
               <button onClick={() => insertAtCursor('(')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-2 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
                   (
@@ -474,8 +514,66 @@ const IdentityQuiz = () => {
                <button onClick={() => insertAtCursor('^2')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-2 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50 flex items-center justify-center">
                   <Latex math="^{2}" />
               </button>
-              <button onClick={() => {setUserAnswer(''); inputRef.current.focus()}} disabled={feedback !== 'idle' || !userAnswer} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-2 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50 flex items-center justify-center">
-                  <Delete size={20}/>
+              <button onClick={() => insertAtCursor('+')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-2 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
+                  +
+              </button>
+            </div>
+
+            {/* 第2行：運算符 */}
+            <div className="w-full grid grid-cols-4 gap-2 mt-2"> 
+              <button onClick={() => insertAtCursor('-')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-2 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
+                  −
+              </button>
+              <button onClick={() => insertAtCursor('*')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-2 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
+                  ×
+              </button>
+              <button onClick={() => insertAtCursor('/')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-2 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
+                  ÷
+              </button>
+              <button onClick={() => insertAtCursor('^')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-2 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
+                  ^
+              </button>
+            </div>
+
+            {/* ✅ 第3行：動態變數按鈕、刪除、清除 */}
+            <div className="w-full grid grid-cols-4 gap-2 mt-2">
+              <button
+                onClick={() => insertAtCursor(currentVariables[0])}
+                disabled={feedback !== 'idle'}
+                className="bg-blue-100 hover:bg-blue-200 text-blue-800 font-bold text-xl py-3 rounded-lg transition active:scale-95 disabled:opacity-50"
+              >
+                {currentVariables[0]}
+              </button>
+              <button
+                onClick={() => insertAtCursor(currentVariables[1])}
+                disabled={feedback !== 'idle'}
+                className="bg-blue-100 hover:bg-blue-200 text-blue-800 font-bold text-xl py-3 rounded-lg transition active:scale-95 disabled:opacity-50"
+              >
+                {currentVariables[1]}
+              </button>
+              
+              <button 
+                onClick={() => {
+                  const cursorPos = inputRef.current?.selectionStart || userAnswer.length;
+                  if (cursorPos > 0) {
+                    setUserAnswer(prev => prev.slice(0, cursorPos - 1) + prev.slice(cursorPos));
+                    setTimeout(() => {
+                      inputRef.current?.setSelectionRange(cursorPos - 1, cursorPos - 1);
+                      inputRef.current?.focus();
+                    }, 0);
+                  }
+                }}
+                disabled={feedback !== 'idle' || !userAnswer} 
+                className="bg-yellow-100 hover:bg-yellow-200 text-yellow-800 font-bold py-3 rounded-lg transition active:scale-95 disabled:opacity-50 flex items-center justify-center"
+              >
+                ← 刪除
+              </button>
+              <button 
+                onClick={() => {setUserAnswer(''); inputRef.current?.focus()}} 
+                disabled={feedback !== 'idle' || !userAnswer} 
+                className="bg-red-100 hover:bg-red-200 text-red-800 font-bold py-3 rounded-lg transition active:scale-95 disabled:opacity-50 flex items-center justify-center"
+              >
+                清除
               </button>
             </div>
 
