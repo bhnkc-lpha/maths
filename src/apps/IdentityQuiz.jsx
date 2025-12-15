@@ -503,55 +503,89 @@ const IdentityQuiz = () => {
               </div>
             </form>
 
-            {/* 第1行：括號、平方 */}
+            {/* 第 1 行：( ) ^2 + */}
             <div className="w-full grid grid-cols-4 gap-2 mt-3"> 
-              <button onClick={() => insertAtCursor('(')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-2 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
-                  (
+              <button onClick={() => insertAtCursor('(')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-3 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
+                (
               </button>
-              <button onClick={() => insertAtCursor(')')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-2 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
-                  )
+              <button onClick={() => insertAtCursor(')')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-3 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
+                )
               </button>
-               <button onClick={() => insertAtCursor('^2')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-2 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50 flex items-center justify-center">
-                  <Latex math="^{2}" />
+              <button onClick={() => insertAtCursor('^2')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-3 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50 flex items-center justify-center">
+                <Latex math="^{2}" />
               </button>
-              <button onClick={() => insertAtCursor('+')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-2 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
-                  +
+              <button onClick={() => insertAtCursor('+')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-3 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
+                +
               </button>
             </div>
 
-            {/* 第2行：運算符 */}
+            {/* 第 2 行：7 8 9 - */}
             <div className="w-full grid grid-cols-4 gap-2 mt-2"> 
-              <button onClick={() => insertAtCursor('-')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-2 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
-                  −
+              <button onClick={() => insertAtCursor('7')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-3 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
+                7
               </button>
-              <button onClick={() => insertAtCursor('*')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-2 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
-                  ×
+              <button onClick={() => insertAtCursor('8')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-3 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
+                8
               </button>
-              <button onClick={() => insertAtCursor('/')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-2 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
-                  ÷
+              <button onClick={() => insertAtCursor('9')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-3 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
+                9
               </button>
-              <button onClick={() => insertAtCursor('^')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-2 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
-                  ^
+              <button onClick={() => insertAtCursor('-')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-3 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
+                −
               </button>
             </div>
 
-            {/* ✅ 第3行：動態變數按鈕、刪除、清除 */}
+            {/* 第 3 行：4 5 6 × */}
+            <div className="w-full grid grid-cols-4 gap-2 mt-2"> 
+              <button onClick={() => insertAtCursor('4')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-3 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
+                4
+              </button>
+              <button onClick={() => insertAtCursor('5')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-3 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
+                5
+              </button>
+              <button onClick={() => insertAtCursor('6')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-3 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
+                6
+              </button>
+              <button onClick={() => insertAtCursor('*')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-3 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
+                ×
+              </button>
+            </div>
+
+            {/* 第 4 行：1 2 3 ÷ */}
+            <div className="w-full grid grid-cols-4 gap-2 mt-2"> 
+              <button onClick={() => insertAtCursor('1')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-3 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
+                1
+              </button>
+              <button onClick={() => insertAtCursor('2')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-3 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
+                2
+              </button>
+              <button onClick={() => insertAtCursor('3')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-3 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
+                3
+              </button>
+              <button onClick={() => insertAtCursor('/')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-3 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
+                ÷
+              </button>
+            </div>
+
+            {/* 第 5 行：0 b y ← 刪除 */}
             <div className="w-full grid grid-cols-4 gap-2 mt-2">
+              <button onClick={() => insertAtCursor('0')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-3 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
+                0
+              </button>
               <button
                 onClick={() => insertAtCursor(currentVariables[0])}
                 disabled={feedback !== 'idle'}
-                className="bg-blue-100 hover:bg-blue-200 text-blue-800 font-bold text-xl py-3 rounded-lg transition active:scale-95 disabled:opacity-50"
+                className="bg-blue-100 hover:bg-blue-200 text-blue-800 font-bold text-xl py-3 rounded-lg transition active:scale-95 disabled:opacity-50 border border-blue-200"
               >
                 {currentVariables[0]}
               </button>
               <button
                 onClick={() => insertAtCursor(currentVariables[1])}
                 disabled={feedback !== 'idle'}
-                className="bg-blue-100 hover:bg-blue-200 text-blue-800 font-bold text-xl py-3 rounded-lg transition active:scale-95 disabled:opacity-50"
+                className="bg-blue-100 hover:bg-blue-200 text-blue-800 font-bold text-xl py-3 rounded-lg transition active:scale-95 disabled:opacity-50 border border-blue-200"
               >
                 {currentVariables[1]}
               </button>
-              
               <button 
                 onClick={() => {
                   const cursorPos = inputRef.current?.selectionStart || userAnswer.length;
@@ -564,16 +598,9 @@ const IdentityQuiz = () => {
                   }
                 }}
                 disabled={feedback !== 'idle' || !userAnswer} 
-                className="bg-yellow-100 hover:bg-yellow-200 text-yellow-800 font-bold py-3 rounded-lg transition active:scale-95 disabled:opacity-50 flex items-center justify-center"
+                className="bg-yellow-100 hover:bg-yellow-200 text-yellow-800 font-bold py-3 rounded-lg transition active:scale-95 disabled:opacity-50 flex items-center justify-center border border-yellow-200 text-sm"
               >
                 ← 刪除
-              </button>
-              <button 
-                onClick={() => {setUserAnswer(''); inputRef.current?.focus()}} 
-                disabled={feedback !== 'idle' || !userAnswer} 
-                className="bg-red-100 hover:bg-red-200 text-red-800 font-bold py-3 rounded-lg transition active:scale-95 disabled:opacity-50 flex items-center justify-center"
-              >
-                清除
               </button>
             </div>
 
