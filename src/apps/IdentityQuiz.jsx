@@ -304,12 +304,46 @@ const IdentityQuiz = () => {
     
     return cleaned;
   };
-
+  
+  // ✅ 標準化單個項（把變數按字母順序排列）
+  const normalizeTerm = (term) => {
+    // 分離符號、係數和變數部分
+    const match = term.match(/^([+-]?)(\d*)(.*)$/);
+    if (!match) return term;
+    
+    const [, sign, coeff, rest] = match;
+    
+    // 分離變數和指數
+    const chars = [];
+    let i = 0;
+    while (i < rest.length) {
+      if (i + 1 < rest.length && rest[i + 1] === '^') {
+        // 有指數的變數 (例如 x^2)
+        const expEnd = i + 2 < rest.length && /\d/.test(rest[i + 2]) ? i + 3 : i + 2;
+        chars.push(rest.slice(i, expEnd));
+        i = expEnd;
+      } else if (rest[i] !== '^' && /[a-z]/i.test(rest[i])) {
+        // 單個變數字母
+        chars.push(rest[i]);
+        i++;
+      } else {
+        i++;
+      }
+    }
+    
+    // 按字母順序排列變數
+    const sortedVars = chars.sort().join('');
+    
+    return `${sign}${coeff}${sortedVars}`;
+  };
+  
   const getTerms = (polynomial) => {
     const normalized = polynomial.replace(/\s+/g, '').toLowerCase();
     const polyWithSign = normalized.startsWith('-') ? normalized : '+' + normalized;
     const terms = polyWithSign.match(/[+-][\dA-Za-z\^]+/g) || [];
-    return terms.sort();
+    
+    // ✅ 標準化每個項後再排序
+    return terms.map(normalizeTerm).sort();
   };
 
   const checkAnswer = (e) => {
