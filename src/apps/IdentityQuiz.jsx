@@ -590,9 +590,18 @@ const IdentityQuiz = () => {
                 onClick={() => {
                   const cursorPos = inputRef.current?.selectionStart || userAnswer.length;
                   if (cursorPos > 0) {
-                    setUserAnswer(prev => prev.slice(0, cursorPos - 1) + prev.slice(cursorPos));
+                    // ✅ 檢查光標前面是否有 ^2 或 ^3
+                    const textBeforeCursor = userAnswer.slice(0, cursorPos);
+                    let deleteCount = 1;
+                    
+                    if (textBeforeCursor.endsWith('^2') || textBeforeCursor.endsWith('^3')) {
+                      deleteCount = 2; // 刪除 ^2 或 ^3 整體
+                    }
+                    
+                    setUserAnswer(prev => prev.slice(0, cursorPos - deleteCount) + prev.slice(cursorPos));
                     setTimeout(() => {
-                      inputRef.current?.setSelectionRange(cursorPos - 1, cursorPos - 1);
+                      const newPos = cursorPos - deleteCount;
+                      inputRef.current?.setSelectionRange(newPos, newPos);
                       inputRef.current?.focus();
                     }, 0);
                   }
