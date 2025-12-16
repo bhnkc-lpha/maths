@@ -448,8 +448,7 @@ const IdentityQuiz = () => {
 
       <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-start p-4 font-sans select-none">
         
-        {/* 頂部卡片：mb-6 → mb-5 (收窄20%) */}
-        <div className="w-full max-w-2xl bg-white rounded-2xl shadow-md overflow-hidden mb-5 border border-slate-100">
+        <div className="w-full max-w-2xl bg-white rounded-2xl shadow-md overflow-hidden mb-4 border border-slate-100">
           <div className="bg-white p-4 md:p-6 flex flex-wrap justify-between items-center gap-4 border-b border-slate-100">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-indigo-100 rounded-lg">
@@ -490,18 +489,15 @@ const IdentityQuiz = () => {
           </div>
         </div>
 
-        {/* 主卡片：p-6 md:p-10 → p-5 md:p-8 (收窄20%) */}
-        <div className="w-full max-w-2xl bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden p-5 md:p-8 relative flex flex-col items-center text-center">
+        <div className="w-full max-w-2xl bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden p-6 md:p-8 relative flex flex-col items-center text-center">
           
-          {/* 模式標籤：mb-4 → mb-3 (收窄20%) */}
-          <div className="mb-3">
+          <div className="mb-2">
               <span className="inline-block px-4 py-2 rounded-full bg-slate-100 text-slate-600 text-lg md:text-xl font-bold">
                   {currentQuestion ? currentQuestion.mode : '...'}
               </span>
           </div>
 
-          {/* 公式區：mb-8 → mb-6, min-h-[120px] → min-h-[100px] (收窄20%) */}
-          <div className="mb-6 w-full flex justify-center items-center min-h-[100px]">
+          <div className="mb-4 w-full flex justify-center items-center min-h-[100px]">
               {currentQuestion ? (
                   <div className="text-3xl md:text-5xl text-slate-800 font-bold tracking-tight flex items-center flex-wrap justify-center gap-2">
                       <Latex math={currentQuestion.text} block={true} />
@@ -551,8 +547,8 @@ const IdentityQuiz = () => {
               </div>
             </form>
 
-            {/* 鍵盤第一行：mt-3 → mt-2.5, gap-2 → gap-1.5, py-3 → py-2.5 (收窄20%) */}
-            <div className="w-full grid grid-cols-4 gap-1.5 mt-2.5"> 
+            {/* 第 1 行：( ) ^2 + */}
+            <div className="w-full grid grid-cols-4 gap-1.5 mt-2"> 
               <button onClick={() => insertAtCursor('(')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-2.5 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
                 (
               </button>
@@ -567,7 +563,7 @@ const IdentityQuiz = () => {
               </button>
             </div>
 
-            {/* 鍵盤其他行：mt-2 → mt-1.5 (收窄20%) */}
+            {/* 第 2 行：7 8 9 - */}
             <div className="w-full grid grid-cols-4 gap-1.5 mt-1.5"> 
               <button onClick={() => insertAtCursor('7')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-2.5 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
                 7
@@ -583,6 +579,7 @@ const IdentityQuiz = () => {
               </button>
             </div>
 
+            {/* 第 3 行：4 5 6 × */}
             <div className="w-full grid grid-cols-4 gap-1.5 mt-1.5"> 
               <button onClick={() => insertAtCursor('4')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-2.5 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
                 4
@@ -598,6 +595,7 @@ const IdentityQuiz = () => {
               </button>
             </div>
 
+            {/* 第 4 行：1 2 3 ÷ */}
             <div className="w-full grid grid-cols-4 gap-1.5 mt-1.5"> 
               <button onClick={() => insertAtCursor('1')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-2.5 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
                 1
@@ -613,6 +611,7 @@ const IdentityQuiz = () => {
               </button>
             </div>
 
+            {/* 第 5 行：0 x y ← 刪除 */}
             <div className="w-full grid grid-cols-4 gap-1.5 mt-1.5">
               <button onClick={() => insertAtCursor('0')} disabled={feedback !== 'idle'} className="bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-mono text-xl py-2.5 rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50">
                 0
@@ -635,11 +634,12 @@ const IdentityQuiz = () => {
                 onClick={() => {
                   const cursorPos = inputRef.current?.selectionStart || userAnswer.length;
                   if (cursorPos > 0) {
+                    // ✅ 檢查光標前面是否有 ^2 或 ^3
                     const textBeforeCursor = userAnswer.slice(0, cursorPos);
                     let deleteCount = 1;
                     
                     if (textBeforeCursor.endsWith('^2') || textBeforeCursor.endsWith('^3')) {
-                      deleteCount = 2;
+                      deleteCount = 2; // 刪除 ^2 或 ^3 整體
                     }
                     
                     setUserAnswer(prev => prev.slice(0, cursorPos - deleteCount) + prev.slice(cursorPos));
@@ -657,8 +657,7 @@ const IdentityQuiz = () => {
               </button>
             </div>
 
-            {/* ⚠️ 預覽區：mt-3 → mt-1.5 (收窄50%) */}
-            <div className={`w-full mt-1.5 min-h-[40px] flex justify-center items-center p-2 rounded-lg bg-slate-100 text-slate-700 text-xl md:text-2xl transition-opacity ${userAnswer ? 'opacity-100' : 'opacity-0'}`}>
+            <div className={`w-full mt-2 min-h-[40px] flex justify-center items-center p-2 rounded-lg bg-slate-100 text-slate-700 text-xl md:text-2xl transition-opacity ${userAnswer ? 'opacity-100' : 'opacity-0'}`}>
                {userAnswer && (
                    <div className="flex items-center gap-2">
                       <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">預覽:</span>
@@ -667,7 +666,6 @@ const IdentityQuiz = () => {
                )}
             </div>
 
-            {/* ⚠️ 提示/反饋區：mt-6 → mt-3 (收窄50%), min-h-[100px] → min-h-[80px] (收窄20%) */}
             <div className="mt-3 flex flex-col items-center justify-center w-full min-h-[80px]">
               
               {feedback === 'idle' && (
@@ -689,8 +687,7 @@ const IdentityQuiz = () => {
 
               {feedback !== 'idle' && (
                 <div className="flex flex-col items-center animate-in fade-in zoom-in duration-300">
-                  {/* mb-3 → mb-2.5 (收窄20%) */}
-                  <div className="flex items-center gap-3 mb-2.5">
+                  <div className="flex items-center gap-3 mb-2">
                     {getFeedbackIcon()}
                     <span className={`text-2xl md:text-3xl font-bold ${feedback === 'correct' ? 'text-green-500' : 'text-red-500'}`}>
                       {feedback === 'correct' ? '答對了！' : '再接再厲！'}
@@ -699,10 +696,8 @@ const IdentityQuiz = () => {
                   
                   {feedback === 'wrong' && (
                     <div className="bg-red-50 p-4 rounded-xl border border-red-100 text-center w-full max-w-md mt-2">
-                      {/* mb-3 → mb-2.5 (收窄20%) */}
-                      <h3 className="text-red-700 font-bold mb-2.5 text-xl">正確解題步驟</h3>
-                      {/* space-y-3 → space-y-2.5 (收窄20%) */}
-                      <div className="space-y-2.5">
+                      <h3 className="text-red-700 font-bold mb-2 text-xl">正確解題步驟</h3>
+                      <div className="space-y-2">
                         {solutionSteps.map((step, index) => (
                           <div key={index} className="flex flex-col items-start p-2 bg-white rounded-lg border border-slate-100 shadow-inner">
                             <span className={`text-xs font-bold uppercase ${index === 0 ? 'text-slate-400' : index === solutionSteps.length - 1 ? 'text-green-600' : 'text-indigo-500'}`}>
@@ -725,8 +720,7 @@ const IdentityQuiz = () => {
           </div>
         </div>
 
-        {/* 底部提示：mt-6 → mt-5 (收窄20%) */}
-        <div className="max-w-2xl w-full mt-5 text-slate-500 text-sm text-center">
+        <div className="max-w-2xl w-full mt-4 text-slate-500 text-sm text-center">
           <p>提示：使用上方輔助按鈕快速輸入括號和平方符號。輸入答案時，請使用 `^` 來表示指數，例如 "x^2"。</p>
         </div>
 
