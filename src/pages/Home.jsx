@@ -52,7 +52,22 @@ const Home = () => {
       ],
       category: '初中',
       topics: ['完全平方', '展開', '因式分解']
-    }  
+    },
+    {
+      id: 'simultaneous-eq',
+      title: '聯立方程特訓',
+      description: '熟習聯立方程應用題設式',
+      icon: Calculator,
+      color: 'bg-purple-500',
+      hoverColor: 'hover:bg-purple-600',
+      path: '/simultaneous-eq-quiz',
+      level: 'F2',
+      badges: [
+        { level: 'F2', chapter: 'CH9', subject: '二元一次方程' }
+      ],
+      category: '初中',
+      topics: ['聯立方程', '設式']
+    }
   ];
 
   // 篩選邏輯
