@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { BookOpen, Calculator, Lightbulb, Delete, CheckCircle, XCircle, Keyboard as KeyboardIcon, X } from 'lucide-react';
+import { BookOpen, Calculator, Lightbulb, Delete, CheckCircle, XCircle, Keyboard as KeyboardIcon, X, Trophy } from 'lucide-react';
 
 // --- 資料庫 (包含所有題目與邏輯) ---
 const QUESTIONS = [
@@ -403,6 +403,7 @@ export default function EquationQuizApp() {
   const [level, setLevel] = useState(1);
   const [qIndex, setQIndex] = useState(0);
   const [questionOrder, setQuestionOrder] = useState([]); 
+  const [score, setScore] = useState(0); // ✅ 新增：計分系統
   
   const [lv1Inputs, setLv1Inputs] = useState({});
   const [activeInput, setActiveInput] = useState(null); 
@@ -534,6 +535,7 @@ export default function EquationQuizApp() {
 
   const checkAnswer = () => {
     let allCorrect = true;
+    let correctCount = 0; // ✅ 新增：計算答對的方程數
     let correctAnswersText = "";
 
     if (level === 1) {
@@ -541,25 +543,28 @@ export default function EquationQuizApp() {
             const userVal = normalize(getCombinedLv1String(idx));
             const validVals = seg.valid.map(normalize);
             
-            if (!validVals.includes(userVal)) {
+            if (validVals.includes(userVal)) {
+                correctCount++; // ✅ 答對一個方程
+            } else {
                 allCorrect = false;
             }
             correctAnswersText += `${idx === 0 ? "第一個方程" : "第二個方程"}: ${seg.valid[0]}\n`;
         });
 
+        // ✅ 加分
+        setScore(prev => prev + correctCount);
+
         if (allCorrect) {
             setInlineFeedback({ 
                 type: 'success', 
-                msg: "全對！做得好！",
+                msg: `全對！做得好！ (+${correctCount} 分)`,
                 action: nextQuestion
             });
             setLv1Completed(true);
-            setTimeout(() => {
-            }, 1500);
         } else {
             setInlineFeedback({ 
                 type: 'error', 
-                msg: `未準確。\n\n正確答案參考：\n${correctAnswersText}`,
+                msg: `${correctCount > 0 ? `答對 ${correctCount} 個方程 (+${correctCount} 分)\n\n` : ''}正確答案參考：\n${correctAnswersText}`,
                 action: nextQuestion
             });
         }
@@ -571,25 +576,30 @@ export default function EquationQuizApp() {
                 const userVal = normalize(input || "");
                 if (currentQ.answers[idx]) {
                     const validVals = currentQ.answers[idx].map(normalize);
-                    if (!validVals.includes(userVal)) {
-                          allCorrect = false;
+                    if (validVals.includes(userVal)) {
+                        correctCount++; // ✅ 答對一個方程
+                    } else {
+                        allCorrect = false;
                     }
                     correctAnswersText += `方程 (${idx + 1}): ${currentQ.answers[idx][0]}\n`;
                 }
             });
         }
 
+        // ✅ 加分
+        setScore(prev => prev + correctCount);
+
         if (allCorrect) {
             setFeedback({ 
                 type: 'success', 
-                msg: "全對！", 
+                msg: `全對！ (+${correctCount} 分)`, 
                 action: nextQuestion 
             });
             setLv1Completed(true);
         } else {
             setFeedback({ 
                 type: 'error', 
-                msg: `未準確。\n\n正確答案參考：\n${correctAnswersText}`,
+                msg: `${correctCount > 0 ? `答對 ${correctCount} 個方程 (+${correctCount} 分)\n\n` : ''}正確答案參考：\n${correctAnswersText}`,
                 action: nextQuestion 
             });
         }
@@ -597,19 +607,8 @@ export default function EquationQuizApp() {
   };
 
   const nextQuestion = () => {
-    if (qIndex < QUESTIONS.length - 1) {
-      setQIndex(prev => prev + 1);
-    } else {
-      alert("恭喜！你已完成所有題目！將重新開始。");
-      const indices = Array.from({ length: QUESTIONS.length }, (_, i) => i);
-      for (let i = indices.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [indices[i], indices[j]] = [indices[j], indices[i]];
-      }
-      setQuestionOrder(indices);
-      setQIndex(0);
-      setLevel(1);
-    }
+    // ✅ 修改：直接進入下一題，循環使用題目
+    setQIndex(prev => (prev + 1) % QUESTIONS.length);
     setFeedback(null); 
     setInlineFeedback(null);
   };
@@ -685,7 +684,11 @@ export default function EquationQuizApp() {
                     <span>聯立方程特訓</span>
                     <span className="text-sm bg-blue-600 px-2 py-0.5 rounded-full">LV{level}</span>
                 </h1>
-                <p className="text-sm text-slate-400 mt-1">題目 {qIndex + 1} / {QUESTIONS.length}</p>
+                {/* ✅ 新增：顯示分數 */}
+                <div className="flex items-center gap-2 mt-1">
+                    <Trophy className="text-yellow-400" size={20}/>
+                    <span className="text-lg font-bold text-yellow-400">{score} 分</span>
+                </div>
                 </div>
                 <div className="flex gap-2">
                 <button onClick={() => setLevel(level === 1 ? 2 : 1)} className="text-sm bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg transition border border-slate-600">
@@ -729,7 +732,7 @@ export default function EquationQuizApp() {
                                             onClick={inlineFeedback.action} 
                                             className="bg-gray-800 text-white px-4 py-2 rounded-lg font-bold hover:bg-gray-700 transition"
                                         >
-                                            {inlineFeedback.type === 'success' ? '下一題' : '跳過 (下一題)'}
+                                            下一題
                                         </button>
                                         {inlineFeedback.type === 'error' && (
                                             <button onClick={() => setInlineFeedback(null)} className="text-sm underline opacity-70 hover:opacity-100 px-4 py-2">
@@ -856,7 +859,7 @@ export default function EquationQuizApp() {
                                     onClick={feedback.action} 
                                     className="w-full bg-gray-800 text-white py-3 rounded-xl font-bold hover:bg-gray-700 transition"
                                 >
-                                    跳過 (下一題)
+                                    下一題
                                 </button>
                             </div>
                         )}
