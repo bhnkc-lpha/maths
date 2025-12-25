@@ -53,7 +53,7 @@ const QUESTIONS = [
     vars: "某醫生為長者病人及非長者病人診症的診金分別為$120及$160。設 x 為長者病人數,y 為非長者病人數。",
     segments: [
       { text: "該醫生為67位病人診症。", keywords: ["67位病人"], valid: ["x+y=67", "y+x=67"], color: "text-red-600", borderColor: "border-red-400" },
-      { text: "長者及非長者總診金為$9000。", keywords: ["長者", "及", "非長者", "為", "9000"], valid: ["120x+160y=9000"], color: "text-green-600", borderColor: "border-green-400" }
+      { text: "長者及非長者總診金為$9000。", keywords: ["長者", "非長者", "9000"], valid: ["120x+160y=9000"], color: "text-green-600", borderColor: "border-green-400" }
     ],
     answers: [
       ["x+y=67", "y+x=67"],
@@ -67,7 +67,7 @@ const QUESTIONS = [
     vars: "設 x 為偉明郵票數,y 為小麗郵票數。",
     segments: [
       { text: "偉明和小麗擁有郵票的總數為300", keywords: ["偉明", "和", "小麗", "為", "300"], valid: ["x+y=300", "y+x=300"], color: "text-red-600", borderColor: "border-red-400" },
-      { text: "若小麗從郵局購入20枚郵票, 她擁有郵票的數目將為偉明擁有的4倍。", keywords: ["小麗", "購入20枚郵票", "將為", "偉明", "4倍"], valid: ["y+20=4x", "y+20=x*4"], color: "text-green-600", borderColor: "border-green-400" }
+      { text: "若小麗從郵局購入20枚郵票, 她擁有郵票的數目將為偉明擁有的4倍。", keywords: ["購入20枚郵票", "將為", "偉明", "4倍"], valid: ["y+20=4x", "y+20=x*4"], color: "text-green-600", borderColor: "border-green-400" }
     ],
     answers: [
       ["x+y=300", "y+x=300"],
@@ -82,7 +82,7 @@ const QUESTIONS = [
     segments: [
       { 
         text: "一瓶橙汁的成本與2瓶牛奶的成本相同。", 
-        keywords: ["一瓶橙汁的成本", "與2瓶牛奶的成本", "相同"], 
+        keywords: ["橙汁的成本", "與", "2瓶牛奶的成本", "相同"], 
         previewOrder: [1, 3, 2],
         valid: ["x=2y", "x=2*y"], 
         color: "text-red-600", 
@@ -101,10 +101,10 @@ const QUESTIONS = [
     text: "在某夏令營,男生人數與女生人數之比為7:6。若17名男生和4名女生離開該夏令營,則男生人數與女生人數相等。求在夏令營原本的女生人數。",
     vars: "設 x 為男生人數,y 為女生人數。",
     segments: [
-      { text: "男生人數與女生人數之比為7:6。", keywords: ["男生人數與女生人數之比", "為", "7:6"], valid: ["x/y=7/6", "6x=7y"], color: "text-red-600", borderColor: "border-red-400" },
+      { text: "男生人數與女生人數之比為7:6。", keywords: ["男生人數", "與", "女生人數", "之比為", "7:6"], valid: ["x/y=7/6", "6x=7y"], color: "text-red-600", borderColor: "border-red-400" },
       { 
         text: "若17名男生和4名女生離開,人數相等。", 
-        keywords: ["若17名男生", "和4名女生離開", "人數相等"], 
+        keywords: ["17名男生", "和", "4名女生離開", "人數相等"], 
         previewOrder: [1, 3, 2],
         valid: ["x-17=y-4", "y-4=x-17"], 
         color: "text-green-600", 
@@ -119,19 +119,19 @@ const QUESTIONS = [
   {
     id: 7,
     title: "足球聯賽",
-    text: "在某足球聯賽,每一球隊贏取一場3分,和得1分,而輸得0分。該聯賽的冠軍隊作賽36場且共得84分。已知該冠軍隊沒有輸掉任何一場球賽,求該冠軍隊贏取球賽的場數。",
+    text: "在某足球聯賽，每一球隊贏取一場球賽得 3 分，和得 1 分，而輸得 0 分。該聯賽的冠軍隊作賽 36 場且共得 84 分。已知該冠軍隊沒有輸掉任何一場球賽，求該冠軍隊贏取球賽的場數。",
     vars: "設 x 為贏場數,y 為和場數。",
     segments: [
       { 
-        text: "該冠軍隊作賽36場(已知該冠軍隊沒有輸掉任何一場球賽)。", 
-        keywords: ["作賽36場"], 
+        text: "該冠軍隊作賽 36 場(已知該冠軍隊沒有輸掉任何一場球賽)。", 
+        keywords: ["作賽", "36", "場"], 
         valid: ["x+y=36"], 
         color: "text-red-600", 
         borderColor: "border-red-400" 
       },
       { 
-        text: "共得84分 (贏取一場球賽3分及和得1分)。", 
-        keywords: ["共得", "84", "贏取一場球賽3分", "及", "和得1分"], 
+        text: "共得 84 分 (贏取一場球賽得 3 分，和得 1 分)。", 
+        keywords: ["共得", "84", "分", "贏取一場球賽得", "3", "分", "和得", "1", "分"], 
         previewOrder: [2, 1, 3, 4, 5],
         valid: ["84=3x+y", "3x+y=84"], 
         color: "text-green-600", 
@@ -149,7 +149,7 @@ const QUESTIONS = [
     text: "在設有6個展區的展覽中心內有132名保安員。各個展區均有相同人數的保安員。在每個展區內,女保安員均較男保安員多4名。求在該展覽中心內男保安員的人數。",
     vars: "設 x 為每區男保安,y 為每區女保安。",
     segments: [
-      { text: "在設有6個展區的展覽中心內有132名保安員。各個展區均有相同人數的保安員。", keywords: ["6個展區的展覽中心內", "有", "132名保安員"], valid: ["6(x+y)=132", "6x+6y=132"], color: "text-red-600", borderColor: "border-red-400" },
+      { text: "在設有6個展區的展覽中心內有132名保安員。各個展區均有相同人數的保安員。", keywords: ["6個展區", "132名保安員"], valid: ["6(x+y)=132", "6x+6y=132"], color: "text-red-600", borderColor: "border-red-400" },
       { text: "在每個展區內,女保安員均較男保安員多4名。", keywords: ["女", "較", "男", "多4名"], valid: ["y=x+4"], color: "text-green-600", borderColor: "border-green-400" }
     ],
     answers: [
@@ -186,7 +186,7 @@ const QUESTIONS = [
       },
       { 
         text: "佩玲將她其中的12個送給志偉,他們將擁有相同數目。", 
-        keywords: ["佩玲", "其中的12個送給志偉", "相同"], 
+        keywords: ["佩玲", "12個送給志偉", "相同"], 
         previewOrder: [1, 3, 2],
         valid: ["x-12=y+12", "y+12=x-12"], 
         color: "text-green-600", 
@@ -218,8 +218,8 @@ const QUESTIONS = [
     text: "在某遊樂場,成人人數與小童人數之比為13:6 。若9名成人和24名小童進入該遊樂場,則成人人數與小童人數之比為8:7 。求在該遊樂場原本的成人人數。",
     vars: "設 x 為原本成人數,y 為原本小童數。",
     segments: [
-      { text: "成人人數與小童人數之比為13:6。", keywords: ["成人人數與小童人數之比", "為", "13:6"], valid: ["x/y=13/6", "6x=13y"], color: "text-red-600", borderColor: "border-red-400" },
-      { text: "9名成人和24名小童進入後,比為8:7。", keywords: ["9名成人和24名小童進入後,比", "為", "8:7"], valid: ["(x+9)/(y+24)=8/7", "7(x+9)=8(y+24)"], color: "text-green-600", borderColor: "border-green-400" }
+      { text: "成人人數與小童人數之比為13:6。", keywords: ["成人人數", "與", "小童人數", "之比為", "13:6"], valid: ["x/y=13/6", "6x=13y"], color: "text-red-600", borderColor: "border-red-400" },
+      { text: "9名成人和24名小童進入後,比為8:7。", keywords: ["9名成人", "和", "24名小童進入", "比為", "8:7"], valid: ["(x+9)/(y+24)=8/7", "7(x+9)=8(y+24)"], color: "text-green-600", borderColor: "border-green-400" }
     ],
     answers: [
       ["x/y=13/6", "6x=13y"],
@@ -246,8 +246,8 @@ const QUESTIONS = [
     text: "設x及y為兩數。x與y之和為456,而7與x之積為y。求x。",
     vars: "設 x, y 為兩數。",
     segments: [
-      { text: "x與y之和為456。", keywords: ["x", "y之和", "為", "456"], valid: ["x+y=456"], color: "text-red-600", borderColor: "border-red-400" },
-      { text: "7與x之積為y。", keywords: ["7", "x之積", "為", "y"], valid: ["7x=y", "y=7x"], color: "text-green-600", borderColor: "border-green-400" }
+      { text: "x與y之和為456。", keywords: ["x", "與", "y", "之和為", "456"], valid: ["x+y=456"], color: "text-red-600", borderColor: "border-red-400" },
+      { text: "7與x之積為y。", keywords: ["7", "與", "x", "之積為", "y"], valid: ["7x=y", "y=7x"], color: "text-green-600", borderColor: "border-green-400" }
     ],
     answers: [
       ["x+y=456"],
@@ -403,7 +403,7 @@ export default function EquationQuizApp() {
   const [level, setLevel] = useState(1);
   const [qIndex, setQIndex] = useState(0);
   const [questionOrder, setQuestionOrder] = useState([]); 
-  const [score, setScore] = useState(0); // ✅ 新增：計分系統
+  const [score, setScore] = useState(0);
   
   const [lv1Inputs, setLv1Inputs] = useState({});
   const [activeInput, setActiveInput] = useState(null); 
@@ -535,7 +535,7 @@ export default function EquationQuizApp() {
 
   const checkAnswer = () => {
     let allCorrect = true;
-    let correctCount = 0; // ✅ 新增：計算答對的方程數
+    let correctCount = 0;
     let correctAnswersText = "";
 
     if (level === 1) {
@@ -544,14 +544,13 @@ export default function EquationQuizApp() {
             const validVals = seg.valid.map(normalize);
             
             if (validVals.includes(userVal)) {
-                correctCount++; // ✅ 答對一個方程
+                correctCount++;
             } else {
                 allCorrect = false;
             }
             correctAnswersText += `${idx === 0 ? "第一個方程" : "第二個方程"}: ${seg.valid[0]}\n`;
         });
 
-        // ✅ 加分
         setScore(prev => prev + correctCount);
 
         if (allCorrect) {
@@ -577,7 +576,7 @@ export default function EquationQuizApp() {
                 if (currentQ.answers[idx]) {
                     const validVals = currentQ.answers[idx].map(normalize);
                     if (validVals.includes(userVal)) {
-                        correctCount++; // ✅ 答對一個方程
+                        correctCount++;
                     } else {
                         allCorrect = false;
                     }
@@ -586,7 +585,6 @@ export default function EquationQuizApp() {
             });
         }
 
-        // ✅ 加分
         setScore(prev => prev + correctCount);
 
         if (allCorrect) {
@@ -607,7 +605,6 @@ export default function EquationQuizApp() {
   };
 
   const nextQuestion = () => {
-    // ✅ 修改：直接進入下一題，循環使用題目
     setQIndex(prev => (prev + 1) % QUESTIONS.length);
     setFeedback(null); 
     setInlineFeedback(null);
@@ -684,7 +681,6 @@ export default function EquationQuizApp() {
                     <span>聯立方程特訓</span>
                     <span className="text-sm bg-blue-600 px-2 py-0.5 rounded-full">LV{level}</span>
                 </h1>
-                {/* ✅ 新增：顯示分數 */}
                 <div className="flex items-center gap-2 mt-1">
                     <Trophy className="text-yellow-400" size={20}/>
                     <span className="text-lg font-bold text-yellow-400">{score} 分</span>
