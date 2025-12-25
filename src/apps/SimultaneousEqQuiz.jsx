@@ -46,7 +46,8 @@ const QUESTIONS = [
       },
       { 
         text: "一個橙子及一個蘋果的價錢分別為$2及$3,現花費了$46購買若干個橙子和蘋果。", 
-        keywords: ["花費了$46", "購買", "橙子", "和", "蘋果"], 
+        keywords: ["花費了$46", "購買", "橙子", "和", "蘋果"],
+        skipInputIndices: [0, 1], // 👈 跳過前兩個匹配（第一次的橙子和蘋果）
         valid: ["2x+3y=46", "3y+2x=46"], 
         color: "text-green-600", 
         borderColor: "border-green-400" 
@@ -135,14 +136,14 @@ const QUESTIONS = [
     segments: [
       { 
         text: "該冠軍隊作賽 36 場(已知該冠軍隊沒有輸掉任何一場球賽)。", 
-        keywords: ["作賽", "36", "場"], 
+        keywords: ["作賽36場"], 
         valid: ["x+y=36"], 
         color: "text-red-600", 
         borderColor: "border-red-400" 
       },
       { 
-        text: "共得 84 分 (贏取一場球賽得 3 分，和得 1 分)。", 
-        keywords: ["共得", "84", "分", "贏取一場球賽得", "3", "分", "和得", "1", "分"], 
+        text: "共得 84 分 (贏取一場球賽得 3 分及和得 1 分)。", 
+        keywords: ["共得", "84", "贏取一場球賽得3分", "及", "和得 1 分"], 
         previewOrder: [2, 1, 3, 4, 5],
         valid: ["84=3x+y", "3x+y=84"], 
         color: "text-green-600", 
