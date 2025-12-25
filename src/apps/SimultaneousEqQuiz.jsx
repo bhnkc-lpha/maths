@@ -247,8 +247,8 @@ const QUESTIONS = [
       { text: "某男生擁有的貼紙數目為某女生擁有的3倍。", keywords: ["男生", "為", "女生", "3倍"], valid: ["x=3y", "3y=x"], color: "text-red-600", borderColor: "border-red-400" },
       { 
         text: "若該男生將他其中的20張貼紙送給該女生,則該女生擁有貼紙的數目為該男生擁有的2倍。", 
-        keywords: ["男生", "女生擁有貼紙的數目", "為", "該", "男生", "2倍"], 
-        skipInputIndices: [0, 3], // 跳過第一個「男生」和「該」
+        keywords: ["男生", "女生擁有貼紙的數目", "為", "男生", "2倍"], 
+        skipInputIndices: [0], // 跳過第一個「男生」和「該」
         valid: ["y+20=2(x-20)"], 
         color: "text-green-600", 
         borderColor: "border-green-400" 
@@ -256,7 +256,7 @@ const QUESTIONS = [
     ],
     answers: [
       ["x=3y", "3y=x"],
-      ["y+20=2(x-20)", "y+20=2*(x-20)"]
+      ["y+20=2(x-20)", "y+20=(x-20)*2"]
     ]
   },
   {
