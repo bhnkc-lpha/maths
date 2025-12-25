@@ -38,8 +38,20 @@ const QUESTIONS = [
     text: "一個橙子及一個蘋果的價錢分別為$2及$3,現花費了$46購買若干個橙子和蘋果。若所購買的橙子和蘋果的總數為20,求所購買橙子的數目。",
     vars: "設 x 為橙子數目,y 為蘋果數目。",
     segments: [
-      { text: "所購買的橙子和蘋果的總數為20。", keywords: ["橙子", "和", "蘋果", "為", "20"], valid: ["x+y=20", "y+x=20"], color: "text-red-600", borderColor: "border-red-400" },
-      { text: "橙($2)及蘋果($3)共花費了$46。", keywords: ["$2", "$3", "花費了", "46"], valid: ["2x+3y=46", "3y+2x=46"], color: "text-green-600", borderColor: "border-green-400" }
+      { 
+        text: "所購買的橙子和蘋果的總數為20。", 
+        keywords: ["橙子", "和", "蘋果", "為", "20"], 
+        valid: ["x+y=20", "y+x=20"], 
+        color: "text-red-600", 
+        borderColor: "border-red-400" 
+      },
+      { 
+        text: "一個橙子及一個蘋果的價錢分別為$2及$3,現花費了$46購買若干個橙子和蘋果。", 
+        keywords: ["花費了$46", "購買", "橙子", "和", "蘋果"], 
+        valid: ["2x+3y=46", "3y+2x=46"], 
+        color: "text-green-600", 
+        borderColor: "border-green-400" 
+      }
     ],
     answers: [
       ["x+y=20", "y+x=20"],
@@ -233,7 +245,14 @@ const QUESTIONS = [
     vars: "設 x 為男生數目,y 為女生數目。",
     segments: [
       { text: "某男生擁有的貼紙數目為某女生擁有的3倍。", keywords: ["男生", "為", "女生", "3倍"], valid: ["x=3y", "3y=x"], color: "text-red-600", borderColor: "border-red-400" },
-      { text: "若該男生將他其中的20張貼紙送給該女生,則該女生擁有貼紙的數目為該男生擁有的2倍。", keywords: ["女生擁有貼紙的數目", "為", "男生", "2倍"], valid: ["y+20=2(x-20)"], color: "text-green-600", borderColor: "border-green-400" }
+      { 
+        text: "若該男生將他其中的20張貼紙送給該女生,則該女生擁有貼紙的數目為該男生擁有的2倍。", 
+        keywords: ["男生", "女生擁有貼紙的數目", "為", "該", "男生", "2倍"], 
+        skipInputIndices: [0, 3], // 跳過第一個「男生」和「該」
+        valid: ["y+20=2(x-20)"], 
+        color: "text-green-600", 
+        borderColor: "border-green-400" 
+      }
     ],
     answers: [
       ["x=3y", "3y=x"],
@@ -507,362 +526,4 @@ export default function EquationQuizApp() {
   };
 
   const getCombinedLv1String = (segIdx) => {
-    const segment = currentQ.segments[segIdx];
-    const escapedKeywords = segment.keywords.map(escapeRegExp);
-    const parts = segment.text.split(new RegExp(`(${escapedKeywords.join('|')})`, 'g'));
-    
-    const inputValues = {};
-    parts.forEach((_, i) => {
-        if (i % 2 === 1) {
-            const inputIndex = (i + 1) / 2;
-            inputValues[inputIndex] = lv1Inputs[`${segIdx}-${i}`] || "";
-        }
-    });
-
-    if (segment.previewOrder) {
-        return segment.previewOrder
-            .map(idx => inputValues[idx] || "")
-            .join("");
-    }
-
-    return parts.map((part, i) => {
-        if (i % 2 === 1) {
-             return lv1Inputs[`${segIdx}-${i}`] || "";
-        }
-        return ""; 
-    }).join("");
-  };
-
-  const checkAnswer = () => {
-    let allCorrect = true;
-    let correctCount = 0;
-    let correctAnswersText = "";
-
-    if (level === 1) {
-        currentQ.segments.forEach((seg, idx) => {
-            const userVal = normalize(getCombinedLv1String(idx));
-            const validVals = seg.valid.map(normalize);
-            
-            if (validVals.includes(userVal)) {
-                correctCount++;
-            } else {
-                allCorrect = false;
-            }
-            correctAnswersText += `${idx === 0 ? "第一個方程" : "第二個方程"}: ${seg.valid[0]}\n`;
-        });
-
-        setScore(prev => prev + correctCount);
-
-        if (allCorrect) {
-            setInlineFeedback({ 
-                type: 'success', 
-                msg: `全對！做得好！ (+${correctCount} 分)`,
-                action: nextQuestion
-            });
-            setLv1Completed(true);
-        } else {
-            setInlineFeedback({ 
-                type: 'error', 
-                msg: `${correctCount > 0 ? `答對 ${correctCount} 個方程 (+${correctCount} 分)\n\n` : ''}正確答案參考：\n${correctAnswersText}`,
-                action: nextQuestion
-            });
-        }
-    } else {
-        if (lv2Inputs.length < 2) {
-            allCorrect = false;
-        } else {
-            lv2Inputs.forEach((input, idx) => {
-                const userVal = normalize(input || "");
-                if (currentQ.answers[idx]) {
-                    const validVals = currentQ.answers[idx].map(normalize);
-                    if (validVals.includes(userVal)) {
-                        correctCount++;
-                    } else {
-                        allCorrect = false;
-                    }
-                    correctAnswersText += `方程 (${idx + 1}): ${currentQ.answers[idx][0]}\n`;
-                }
-            });
-        }
-
-        setScore(prev => prev + correctCount);
-
-        if (allCorrect) {
-            setFeedback({ 
-                type: 'success', 
-                msg: `全對！ (+${correctCount} 分)`, 
-                action: nextQuestion 
-            });
-            setLv1Completed(true);
-        } else {
-            setFeedback({ 
-                type: 'error', 
-                msg: `${correctCount > 0 ? `答對 ${correctCount} 個方程 (+${correctCount} 分)\n\n` : ''}正確答案參考：\n${correctAnswersText}`,
-                action: nextQuestion 
-            });
-        }
-    }
-  };
-
-  const nextQuestion = () => {
-    setQIndex(prev => (prev + 1) % QUESTIONS.length);
-    setFeedback(null); 
-    setInlineFeedback(null);
-  };
-
-  const renderLv1Segment = (segment, idx) => {
-    const escapedKeywords = segment.keywords.map(escapeRegExp);
-    const parts = segment.text.split(new RegExp(`(${escapedKeywords.join('|')})`, 'g'));
-
-    return (
-      <div 
-        key={idx} 
-        className={`
-          mb-8 p-4 rounded-xl border-l-8 transition-all relative
-          ${segment.borderColor} bg-white shadow-sm
-        `}
-      >
-        <div className="absolute -top-3 left-4 px-2 py-0.5 bg-white text-xs font-bold text-gray-500 rounded border shadow-sm">
-            {idx === 0 ? "第一個方程" : "第二個方程"}
-        </div>
-
-        <div className="mb-4 text-lg md:text-xl leading-loose text-gray-700 font-serif break-words">
-          {parts.map((part, i) => {
-             const isKeyword = i % 2 === 1;
-             
-             if (isKeyword) {
-                 const isActive = activeInput?.type === 'lv1' && activeInput?.index === idx && activeInput?.partIdx === i;
-                 return (
-                   <span key={i} className="inline-flex flex-col items-center mx-2 align-top">
-                     <input
-                        ref={el => inputRefs.current[`lv1-${idx}-${i}`] = el}
-                        type="text"
-                        value={lv1Inputs[`${idx}-${i}`] || ""}
-                        onChange={(e) => handleInputChange(e.target.value, 'lv1', idx, i)}
-                        onFocus={() => setActiveInput({ type: 'lv1', index: idx, partIdx: i })}
-                        style={{ width: `${Math.max(4, (lv1Inputs[`${idx}-${i}`] || "").length + 1)}ch` }}
-                        className={`
-                            h-10 text-center font-mono text-lg border-2 rounded-md shadow-sm min-w-[4rem]
-                            focus:outline-none focus:ring-2 focus:ring-blue-300 transition-colors
-                            ${isActive ? 'border-blue-500 bg-white' : 'border-gray-300 bg-gray-50'}
-                            ${segment.color.replace('text-', 'text-')}
-                        `}
-                        placeholder="..."
-                      />
-                      <span className={`text-sm mt-1 font-bold ${segment.color} opacity-70 whitespace-nowrap`}>
-                        {part}
-                      </span>
-                   </span>
-                 );
-             } else {
-               return <span key={i}>{part}</span>;
-             }
-          })}
-        </div>
-
-        <div className="mt-2 bg-gray-100 p-3 rounded-lg flex items-center gap-2">
-            <span className="text-sm text-gray-500 font-bold">預覽:</span>
-            <div className="flex-1 overflow-x-auto">
-                <MathRenderer expression={getCombinedLv1String(idx)} />
-            </div>
-        </div>
-      </div>
-    );
-  };
-
-  return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center">
-        <div className="w-full max-w-4xl bg-white shadow-2xl min-h-screen md:min-h-[90vh] md:my-4 md:rounded-2xl overflow-hidden flex flex-col relative">
-            
-            <header className="bg-slate-800 text-white p-4 md:p-6 flex justify-between items-center z-10">
-                <div>
-                <h1 className="text-xl md:text-2xl font-bold flex items-center gap-2">
-                    <Calculator className="text-blue-400"/> 
-                    <span>聯立方程特訓</span>
-                    <span className="text-sm bg-blue-600 px-2 py-0.5 rounded-full">LV{level}</span>
-                </h1>
-                <div className="flex items-center gap-2 mt-1">
-                    <Trophy className="text-yellow-400" size={20}/>
-                    <span className="text-lg font-bold text-yellow-400">{score} 分</span>
-                </div>
-                </div>
-                <div className="flex gap-2">
-                <button onClick={() => setLevel(level === 1 ? 2 : 1)} className="text-sm bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg transition border border-slate-600">
-                    切換模式
-                </button>
-                <button onClick={() => setShowNotes(true)} className="p-2 hover:bg-slate-700 rounded-lg transition text-blue-300">
-                    <BookOpen size={24}/>
-                </button>
-                </div>
-            </header>
-
-            <main className="flex-1 overflow-y-auto p-4 md:p-8 pb-32 md:pb-8">
-                {currentQ && (
-                    <>
-                    <div className="bg-white p-4 mb-4 rounded-lg shadow-sm border border-gray-200">
-                        <p className="text-gray-800 text-lg leading-relaxed font-serif">{currentQ.text}</p>
-                    </div>
-
-                    <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6 rounded-r-lg">
-                       <p className="text-blue-900 font-medium md:text-lg">
-                         <span className="font-bold">題目：</span>{currentQ.vars}
-                       </p>
-                    </div>
-
-                    {level === 1 && (
-                        <div className="space-y-6">
-                            <h2 className="text-2xl font-bold text-gray-800 mb-2 border-b pb-2">{currentQ.title}</h2>
-                            {currentQ.segments.map((seg, idx) => renderLv1Segment(seg, idx))}
-                            
-                            {inlineFeedback && (
-                                <div className={`p-4 rounded-xl border-2 animate-in fade-in slide-in-from-top-2 ${inlineFeedback.type === 'success' ? 'bg-green-50 border-green-200 text-green-800' : 'bg-red-50 border-red-200 text-red-800'}`}>
-                                    <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
-                                         {inlineFeedback.type === 'success' ? <CheckCircle size={20}/> : <XCircle size={20}/>}
-                                         {inlineFeedback.type === 'success' ? '答對了！' : '再試一次'}
-                                    </h3>
-                                    <div className="font-mono whitespace-pre-wrap pl-7">
-                                        {inlineFeedback.msg}
-                                    </div>
-                                    <div className="mt-3 flex gap-2">
-                                        <button 
-                                            onClick={inlineFeedback.action} 
-                                            className="bg-gray-800 text-white px-4 py-2 rounded-lg font-bold hover:bg-gray-700 transition"
-                                        >
-                                            下一題
-                                        </button>
-                                        {inlineFeedback.type === 'error' && (
-                                            <button onClick={() => setInlineFeedback(null)} className="text-sm underline opacity-70 hover:opacity-100 px-4 py-2">
-                                                關閉提示
-                                            </button>
-                                        )}
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    )}
-
-                    {level === 2 && (
-                        <div className="space-y-8">
-                            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 relative">
-                                <h2 className="text-2xl font-bold text-gray-800 mb-4">{currentQ.title}</h2>
-                                <p className="text-lg md:text-xl text-gray-700 leading-loose">
-                                    {highlightHint ? (
-                                        (() => {
-                                            const allKeywords = currentQ.segments.flatMap(s => s.keywords);
-                                            const escapedAllKeywords = allKeywords.map(escapeRegExp);
-                                            const uniquePattern = [...new Set(escapedAllKeywords)].join('|');
-                                            
-                                            return currentQ.text.split(new RegExp(`(${uniquePattern})`, 'g')).map((part, i) => 
-                                                allKeywords.includes(part) 
-                                                ? <span key={i} className="bg-yellow-200 px-1 rounded">{part}</span> 
-                                                : part
-                                            );
-                                        })()
-                                    ) : currentQ.text}
-                                </p>
-                                <button 
-                                    onClick={() => setHighlightHint(!highlightHint)}
-                                    className="absolute top-6 right-6 text-amber-500 bg-amber-50 p-2 rounded-full hover:bg-amber-100 transition"
-                                >
-                                    <Lightbulb size={24} className={highlightHint ? "fill-current" : ""}/>
-                                </button>
-                            </div>
-
-                            <div className="grid md:grid-cols-2 gap-6">
-                                {[0, 1].map((idx) => (
-                                    <div 
-                                        key={idx}
-                                        className={`
-                                            p-4 rounded-xl border-2 transition-all cursor-text relative
-                                            ${activeInput?.type === 'lv2' && activeInput?.index === idx ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-200' : 'border-gray-200 bg-gray-50'}
-                                        `}
-                                        onClick={() => {
-                                            setActiveInput({ type: 'lv2', index: idx });
-                                            if(inputRefs.current[`lv2-${idx}`]) inputRefs.current[`lv2-${idx}`].focus();
-                                        }}
-                                    >
-                                        <span className="absolute -top-3 left-4 bg-white px-2 text-sm font-bold text-gray-500 border rounded">
-                                            方程 ({idx + 1})
-                                        </span>
-                                        <div className="flex items-center mt-2">
-                                            <input
-                                                ref={el => inputRefs.current[`lv2-${idx}`] = el}
-                                                type="text"
-                                                value={lv2Inputs[idx]}
-                                                onChange={(e) => handleInputChange(e.target.value, 'lv2', idx)}
-                                                className="w-full bg-transparent text-xl md:text-2xl font-mono focus:outline-none"
-                                                placeholder="..."
-                                            />
-                                        </div>
-                                        <div className="mt-2 h-8 flex items-center justify-end text-gray-400">
-                                             <MathRenderer expression={lv2Inputs[idx]} />
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-                    </>
-                )}
-            </main>
-
-            <div className="bg-gray-800 text-white p-2 md:px-8 text-center md:text-left z-20 flex justify-between items-center">
-                <div className="flex items-center gap-4">
-                    <span className="text-gray-400 text-sm">輸入值:</span>
-                    <div className="bg-gray-700 px-4 py-1 rounded-lg min-w-[100px]">
-                        <MathRenderer expression={
-                            activeInput 
-                            ? (activeInput.type === 'lv1' 
-                                ? lv1Inputs[`${activeInput.index}-${activeInput.partIdx}`] 
-                                : lv2Inputs[activeInput.index]) 
-                            : ""
-                        } />
-                    </div>
-                </div>
-                <button onClick={checkAnswer} className="hidden md:block bg-green-600 hover:bg-green-500 px-6 py-2 rounded-lg font-bold shadow">
-                    檢查答案
-                </button>
-            </div>
-            
-            <Keypad 
-                isVisible={showKeypad}
-                toggleVisibility={() => setShowKeypad(!showKeypad)}
-                onInput={handleVirtualInput} 
-                onDelete={handleVirtualDelete} 
-                onClear={handleVirtualClear} 
-                onEnter={checkAnswer} 
-            />
-            
-            <CheatsheetModal isOpen={showNotes} onClose={() => setShowNotes(false)} />
-
-            {feedback && (
-                <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-                    <div className="bg-white p-8 rounded-2xl shadow-2xl max-w-sm w-full text-center animate-in fade-in zoom-in duration-200">
-                        {feedback.type === 'success' ? (
-                            <div className="text-green-600 flex flex-col items-center">
-                                <CheckCircle size={64} className="mb-4"/>
-                                <h3 className="text-2xl font-bold mb-2">答對了！</h3>
-                                <p className="text-gray-500">正在前往下一題...</p>
-                            </div>
-                        ) : (
-                            <div className="text-red-500 flex flex-col items-center">
-                                <XCircle size={64} className="mb-4"/>
-                                <h3 className="text-2xl font-bold mb-2">再試一次</h3>
-                                <div className="bg-red-50 p-4 rounded-xl w-full mb-4">
-                                    <p className="text-gray-800 font-mono break-all whitespace-pre-wrap">{feedback.msg}</p>
-                                </div>
-                                <button 
-                                    onClick={feedback.action} 
-                                    className="w-full bg-gray-800 text-white py-3 rounded-xl font-bold hover:bg-gray-700 transition"
-                                >
-                                    下一題
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            )}
-        </div>
-    </div>
-  );
-}
+    const segment
